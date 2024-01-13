@@ -14,7 +14,7 @@ public:
 
 private:
 
-	int populationSize;
+	size_t populationSize;
 	double mutationRatio;
 	double crossoverRatio;
 
@@ -31,5 +31,8 @@ private:
 	int iterationsWithoutImprovement;
 	const int stagnationThreshold = 10;
 	int tournamentSize = 10;
+
+	bool needHelp = false;
+
 
 };

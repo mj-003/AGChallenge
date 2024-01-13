@@ -13,13 +13,15 @@ COptimizer::COptimizer(CLFLnetEvaluator &cEvaluator)
 	c_rand_engine.seed(c_seed_generator());
 
 	d_current_best_fitness = 0;
-}//COptimizer::COptimizer(CEvaluator &cEvaluator)
+}
+
 
 void COptimizer::vInitialize()
 {
 	d_current_best_fitness = -DBL_MAX;
 	v_current_best.clear();
-}//void COptimizer::vInitialize()
+}
+
 
 void COptimizer::vRunIteration()
 {

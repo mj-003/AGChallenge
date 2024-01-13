@@ -1,5 +1,6 @@
 #include "Individual.h"
 
+
 /* ---------- Constructors ----------- */
 
 Individual::Individual(std::vector<int> genotype) 
@@ -8,7 +9,7 @@ Individual::Individual(std::vector<int> genotype)
 
 
 Individual::Individual() 
-	: fitness(-1) 
+	: genotype(), fitness(-1)
 {}
 
 Individual::Individual(const Individual& other) 
@@ -62,8 +63,10 @@ double Individual::getFitness() const
 
 void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator) 
 {
-	for (int i = 0; i < genotype.size(); i++) {
-		if (dRand() < mutationRatio) {
+	for (int i = 0; i < genotype.size(); i++) 
+	{
+		if (dRand() < mutationRatio) 
+		{
 			genotype.at(i) = lRand(evaluator.iGetNumberOfValues(i));
 		}
 	}
@@ -82,14 +85,14 @@ std::vector<Individual> Individual::cross(Individual& other, double crossoverRat
 
 		for (int i = 0; i < crossoverPoint; i++)    
 		{
-			child1Genotype.push_back(this->genotype[i]);
+			child1Genotype.push_back(genotype[i]);
 			child2Genotype.push_back(other.genotype[i]);
 		}
 
-		for (int i = crossoverPoint; i < this->genotype.size(); i++) 
+		for (int i = crossoverPoint; i < genotype.size(); i++) 
 		{
 			child1Genotype.push_back(other.genotype[i]);
-			child2Genotype.push_back(this->genotype[i]);
+			child2Genotype.push_back(genotype[i]);
 		}
 
 

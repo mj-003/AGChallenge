@@ -64,17 +64,38 @@ void GeneticAlgorithm::singleIteration()
 		population.at(i).evaluate(evaluator);
 	}
 
-	while (newPopulation.size() < population.size())
+	while (newPopulation.size() < population.size() - 1)
 	{
 		std::vector<Individual> parents;
 
-		parents.push_back(population.at(selectParentIndex(tournamentSize)));
-		parents.push_back(population.at(selectParentIndex(tournamentSize)));
+		if (!needHelp) 
+		{
+			parents.push_back(population.at(selectParentIndex(tournamentSize)));
+			parents.push_back(population.at(selectParentIndex(tournamentSize)));
 
-		std::vector<Individual> children = parents.at(0).cross(parents.at(1), crossoverRatio, evaluator);
+			std::vector<Individual> children = parents.at(0).cross(parents.at(1), crossoverRatio, evaluator);
 
-		newPopulation.push_back(children.at(0));
-		newPopulation.push_back(children.at(1));
+			newPopulation.push_back(children.at(0));
+			newPopulation.push_back(children.at(1));
+		}
+
+		else 
+		{
+			std::vector<int> newIndividual1gen, newIndividual2gen;
+
+			for (int i = 0; i < evaluator.iGetNumberOfBits(); i++)
+			{
+				newIndividual1gen.push_back(lRand(evaluator.iGetNumberOfValues(i)));
+				newIndividual2gen.push_back(lRand(evaluator.iGetNumberOfValues(i)));
+			}
+
+			newPopulation.push_back(Individual(newIndividual1gen));
+			newPopulation.push_back(Individual(newIndividual2gen));
+
+			//needHelp = false;
+		}
+
+		
 	}
 
 	for (int i = 0; i < newPopulation.size(); i++)
@@ -112,7 +133,6 @@ void GeneticAlgorithm::findBestIndividual()
 
 	for (int i = 0; i < population.size(); i++)
 	{
-		population.at(i).evaluate(evaluator);
 		if (population.at(i).getFitness() > bestIndividual.getFitness())
 		{
 			bestIndividual = population.at(i);
@@ -134,8 +154,9 @@ void GeneticAlgorithm::findBestIndividual()
 	{
 		if (tournamentSize++ > populationSize) 
 		{
-			tournamentSize = populationSize;
+			needHelp = true;
+			//tournamentSize = populationSize;
 		}
-		else tournamentSize++;
+		//else tournamentSize++;
 	}
 }
