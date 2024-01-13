@@ -68,7 +68,7 @@ void GeneticAlgorithm::singleIteration()
 	{
 		std::vector<Individual> parents;
 
-		if (!needHelp) 
+		if (!stagnation) 
 		{
 			parents.push_back(population.at(selectParentIndex(tournamentSize)));
 			parents.push_back(population.at(selectParentIndex(tournamentSize)));
@@ -82,6 +82,8 @@ void GeneticAlgorithm::singleIteration()
 		else 
 		{
 			std::vector<int> newIndividual1gen, newIndividual2gen;
+			mutationRatio *= 0.5;
+			tournamentSize = 1;
 
 			for (int i = 0; i < evaluator.iGetNumberOfBits(); i++)
 			{
@@ -89,8 +91,13 @@ void GeneticAlgorithm::singleIteration()
 				newIndividual2gen.push_back(lRand(evaluator.iGetNumberOfValues(i)));
 			}
 
-			newPopulation.push_back(Individual(newIndividual1gen));
-			newPopulation.push_back(Individual(newIndividual2gen));
+			parents.push_back(Individual(newIndividual1gen));
+			parents.push_back(Individual(newIndividual2gen));
+
+			std::vector<Individual> children = parents.at(0).cross(parents.at(1), crossoverRatio, evaluator);
+
+			newPopulation.push_back(children.at(0));
+			newPopulation.push_back(children.at(1));
 
 			//needHelp = false;
 		}
@@ -154,9 +161,7 @@ void GeneticAlgorithm::findBestIndividual()
 	{
 		if (tournamentSize++ > populationSize) 
 		{
-			needHelp = true;
-			//tournamentSize = populationSize;
+			stagnation = true;
 		}
-		//else tournamentSize++;
 	}
 }

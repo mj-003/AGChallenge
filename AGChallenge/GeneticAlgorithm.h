@@ -30,9 +30,9 @@ private:
 	
 	int iterationsWithoutImprovement;
 	const int stagnationThreshold = 10;
-	int tournamentSize = 10;
+	int tournamentSize = 2;
 
-	bool needHelp = false;
+	bool stagnation = false;
 
 
 };

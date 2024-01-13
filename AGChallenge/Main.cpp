@@ -18,7 +18,7 @@ void vRunExperiment(CLFLnetEvaluator &cConfiguredEvaluator)
 {
 	try
 	{
-		GeneticAlgorithm c_optimizer(100, 0.90, 0.001, cConfiguredEvaluator);
+		GeneticAlgorithm c_optimizer(100, 0.9, 0.0001, cConfiguredEvaluator);
 
 		c_optimizer.run(100000);
 
