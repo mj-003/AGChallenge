@@ -17,7 +17,7 @@ GeneticAlgorithm::GeneticAlgorithm(int populationSize, double crossRatio, double
 
 
 
-/* ---------- Main Function ---------- */
+/* ---------- Run Algorithm ---------- */
 
 void GeneticAlgorithm::run(int iterations)
 {
@@ -59,7 +59,7 @@ void GeneticAlgorithm::singleIteration()
 {
 
 	vector<Individual> newPopulation;
-
+	
 	for (int i = 0; i < population.size(); i++)
 	{
 		population.at(i).evaluate(evaluator);
@@ -72,8 +72,11 @@ void GeneticAlgorithm::singleIteration()
 
 		if (!stagnation) 
 		{
-			parents.push_back(population.at(selectParentIndex(tournamentSize)));
-			parents.push_back(population.at(selectParentIndex(tournamentSize)));
+			int fstParentIndex = selectParentIndex(tournamentSize, -1);
+			int sndParentIndex = selectParentIndex(tournamentSize, fstParentIndex);
+
+			parents.push_back(population.at(fstParentIndex));
+			parents.push_back(population.at(sndParentIndex));
 		}
 
 		else 
@@ -103,14 +106,18 @@ void GeneticAlgorithm::singleIteration()
 }
 
 
-int GeneticAlgorithm::selectParentIndex(int tournamentSize)
+int GeneticAlgorithm::selectParentIndex(int tournamentSize, int occupiedIndex)
 {
 	int winnerIndex = iRand() % populationSize;
+	while (winnerIndex == occupiedIndex) winnerIndex = iRand() % populationSize;
+
 	double winnerFitness = population[winnerIndex].getFitness();
 
 	for (int i = 0; i < tournamentSize; i++)
 	{
 		int competitorIndex = iRand() % populationSize;
+		while (competitorIndex == occupiedIndex) competitorIndex = iRand() % populationSize;
+
 		double competitorFitness = population[competitorIndex].getFitness();
 
 		if (competitorFitness > winnerFitness)
@@ -119,8 +126,10 @@ int GeneticAlgorithm::selectParentIndex(int tournamentSize)
 			winnerFitness = competitorFitness;
 		}
 	}
+
 	return winnerIndex;
 }
+
 
 
 void GeneticAlgorithm::findBestIndividual()
@@ -136,20 +145,15 @@ void GeneticAlgorithm::findBestIndividual()
 		}
 	}
 
-	if (improved) 
-	{
-		iterationsWithoutImprovement = 0;
-	}
-
-	else 
-	{
-		iterationsWithoutImprovement++;
-	}
-
-	if (iterationsWithoutImprovement >= stagnationThreshold) 
-	{
-		stagnation = true;
-	}
+	checkIfStagnation(improved);
 }
+
+
+void GeneticAlgorithm::checkIfStagnation(bool improved)
+{
+	iterationsWithoutImprovement = improved ? 0 : iterationsWithoutImprovement ++;
+	stagnation = iterationsWithoutImprovement >= stagnationThreshold;
+}
+
 
 

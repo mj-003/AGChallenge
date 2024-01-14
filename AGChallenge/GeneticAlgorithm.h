@@ -25,15 +25,17 @@ private:
 	void initializePopulation();
 	void singleIteration();
 	void findBestIndividual();
-	int selectParentIndex(int tournamentSize);
+	int selectParentIndex(int tournamentSize, int occupiedIndex);
 
 
 	/* ------ helping with stagnation ------ */
 
 	int iterationsWithoutImprovement;
 	const int stagnationThreshold = 10;
-	int tournamentSize = 10;
+	int tournamentSize = max(populationSize % 10, 2);
 	bool stagnation = false;
+
+	void checkIfStagnation(bool improved);
 
 
 };
