@@ -10,6 +10,7 @@ GeneticAlgorithm::GeneticAlgorithm(int populationSize, double crossProbability, 
 	populationSize(populationSize),
 	iterationsWithoutImprovement(0)
 {
+	mutation->mutate(bestIndividual, mutationRatio, evaluator);
 	initializePopulation();
 	bestIndividual = population.at(0);
 }

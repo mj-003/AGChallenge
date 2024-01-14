@@ -2,6 +2,7 @@
 #include "Evaluator.h"
 #include "Individual.h"
 #include <vector>
+#include "IMutation.h"
 
 class GeneticAlgorithm
 {
@@ -31,5 +32,6 @@ private:
 	int iterationsWithoutImprovement;
 	const int stagnationThreshold = 10;
 	int tournamentSize = 10;
+	IMutation* mutation;
 
 };

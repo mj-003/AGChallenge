@@ -54,6 +54,9 @@
     <ClCompile Include="GeneticAlgorithm.cpp">
       <Filter>Source Files\Genetic Algorithm</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleMutation.cpp">
+      <Filter>Source Files\Genetic Algorithm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Timer.h">
@@ -84,6 +87,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneticAlgorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IMutation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMutation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

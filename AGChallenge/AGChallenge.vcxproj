@@ -151,6 +151,7 @@
     <ClCompile Include="MyMath.cpp" />
     <ClCompile Include="NETsimulator.cpp" />
     <ClCompile Include="Optimizer.cpp" />
+    <ClCompile Include="SimpleMutation.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Tools.cpp" />
   </ItemGroup>
@@ -158,11 +159,13 @@
     <ClInclude Include="Evaluator.h" />
     <ClInclude Include="fitness.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
+    <ClInclude Include="IMutation.h" />
     <ClInclude Include="Individual.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="NETsimulator.h" />
     <ClInclude Include="Optimizer.h" />
+    <ClInclude Include="SimpleMutation.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Tools.h" />
   </ItemGroup>
