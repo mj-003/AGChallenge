@@ -3,18 +3,20 @@
 #include "Evaluator.h"
 #include "MyMath.h"
 
-class Individual 
+class Individual
 {
 public:
 
 	Individual();
-	Individual(std::vector<int> genotype);
+	Individual(std::unique_ptr<std::vector<int>> genotype);
 
 	Individual(const Individual& other);
 	Individual(Individual&& other) noexcept;
 
 	Individual& operator=(const Individual& other);
 	Individual& operator=(Individual&& other) noexcept;
+
+	~Individual();
 
 	double getFitness() const;
 	void evaluate(CLFLnetEvaluator& evaluator);
@@ -23,8 +25,8 @@ public:
 	std::vector<Individual> cross(Individual& other, double crossoverRate, CLFLnetEvaluator& evaluator);
 
 
-public:
+private:
 
-	std::vector<int> genotype;
+	std::unique_ptr<std::vector<int>> genotype;
 	double fitness;
 };

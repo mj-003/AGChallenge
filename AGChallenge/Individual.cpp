@@ -3,71 +3,70 @@
 
 /* ---------- Constructors ----------- */
 
-Individual::Individual(std::vector<int> genotype) 
+Individual::Individual() 
+	: genotype(std::make_unique<std::vector<int>>()), fitness(-1) 
+{}
+
+
+Individual::Individual(std::unique_ptr<std::vector<int>> genotype)
 	: genotype(std::move(genotype)), fitness(-1) 
 {}
 
 
-Individual::Individual() 
-	: genotype(), fitness(-1)
+Individual::Individual(const Individual& other)
+	: genotype(std::make_unique<std::vector<int>>(*other.genotype)), 
+	  fitness(other.fitness) 
 {}
 
-Individual::Individual(const Individual& other) 
-	: genotype(other.genotype), fitness(other.fitness) 
-{}
 
-Individual::Individual(Individual&& other) noexcept
-	: genotype(std::move(other.genotype)), fitness(other.fitness) 
-{}
+Individual::Individual(Individual&& other) noexcept = default;
+
 
 Individual& Individual::operator=(const Individual& other) 
 {
 	if (this != &other) 
 	{
-		genotype = other.genotype;
+		genotype = std::make_unique<std::vector<int>>(*other.genotype);
 		fitness = other.fitness;
 	}
-
 	return *this;
 }
 
-Individual& Individual::operator=(Individual&& other) noexcept
-{
-	if (this != &other) 
-	{
-		genotype = std::move(other.genotype);
-		fitness = other.fitness;
-	}
 
-	return *this;
-}
+Individual& Individual::operator=(Individual&& other) noexcept = default;
+
+
+Individual::~Individual() = default;
 
 
 
 /* ---------- Public Methods ---------- */
 
-void Individual::evaluate(CLFLnetEvaluator &evaluator) 
+void Individual::evaluate(CLFLnetEvaluator& evaluator)
 {
-	if (fitness == -1) 
+	if (fitness == -1)
 	{
-		fitness = evaluator.dEvaluate(&genotype);
+		fitness = evaluator.dEvaluate(genotype.get());
 	}
 }
 
 
-double Individual::getFitness() const 
+double Individual::getFitness() const
 {
 	return fitness;
 }
 
 
-void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator) 
+void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 {
-	for (int i = 0; i < genotype.size(); i++) 
+	for (int i = 0; i < genotype->size(); i++)
 	{
-		if (dRand() < mutationRatio) 
+		if (dRand() < mutationRatio)
 		{
-			genotype.at(i) = lRand(evaluator.iGetNumberOfValues(i));
+			if (dRand() < 0.5)
+				genotype->at(i) = 0;
+			else
+				genotype->at(i) = lRand(evaluator.iGetNumberOfValues(i));
 		}
 	}
 }
@@ -75,30 +74,26 @@ void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 
 std::vector<Individual> Individual::cross(Individual& other, double crossoverRatio, CLFLnetEvaluator& evaluator)
 {
-	if (dRand() < crossoverRatio) 
+	if (dRand() < crossoverRatio)
 	{
-		int crossoverPoint = lRand(genotype.size());
+		int crossoverPoint = lRand(genotype->size());
 
-		std::vector<int> child1Genotype;
-		std::vector<int> child2Genotype;
-    
+		auto genotype1 = std::make_unique<std::vector<int>>(*genotype); 
+		auto genotype2 = std::make_unique<std::vector<int>>(*other.genotype); 
 
-		for (int i = 0; i < crossoverPoint; i++)    
+		for (int i = crossoverPoint; i < genotype->size(); i++)
 		{
-			child1Genotype.push_back(genotype[i]);
-			child2Genotype.push_back(other.genotype[i]);
+			std::swap(genotype1->at(i), genotype2->at(i)); 
 		}
 
-		for (int i = crossoverPoint; i < genotype.size(); i++) 
-		{
-			child1Genotype.push_back(other.genotype[i]);
-			child2Genotype.push_back(genotype[i]);
-		}
+		Individual child1(std::move(genotype1));
+		Individual child2(std::move(genotype2));
 
-
-		return std::vector<Individual> { Individual(std::move(child1Genotype)), Individual(std::move(child2Genotype)) };
+		return std::vector<Individual> { child1, child2 };
 	}
 
-	else return std::vector<Individual> { *this, other };
+	else
+	{
+		return std::vector<Individual> { *this, other };
+	}
 }
-
