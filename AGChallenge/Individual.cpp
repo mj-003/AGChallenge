@@ -40,6 +40,20 @@ Individual::~Individual() = default;
 
 
 
+/* ---------- Getters and Setters ---------- */
+
+std::unique_ptr<std::vector<int>>& Individual::getGenotype()
+{
+	return genotype;
+}
+
+double Individual::getFitness() const
+{
+	return fitness;
+}
+
+
+
 /* ---------- Calculate Fitness Value ---------- */
 
 void Individual::evaluate(CLFLnetEvaluator& evaluator)
@@ -48,12 +62,6 @@ void Individual::evaluate(CLFLnetEvaluator& evaluator)
 	{
 		fitness = evaluator.dEvaluate(genotype.get());
 	}
-}
-
-
-double Individual::getFitness() const
-{
-	return fitness;
 }
 
 

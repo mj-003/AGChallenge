@@ -26,8 +26,10 @@ void COptimizer::vRunIteration()
 {
 	geneticAlgorithm.singleIteration();
 	geneticAlgorithm.findBestIndividual();
-	std::cout << geneticAlgorithm.bestFitness << std::endl;
 
+	d_current_best_fitness = geneticAlgorithm.bestFitness;
+	v_current_best = *geneticAlgorithm.bestIndividual->getGenotype();
+	std::cout << geneticAlgorithm.bestFitness << std::endl;
 }
 
 
@@ -39,5 +41,5 @@ void COptimizer::v_fill_randomly(vector<int> &vSolution)
 	for (int ii = 0; ii < vSolution.size(); ii++)
 	{
 		vSolution.at(ii) = lRand(c_evaluator.iGetNumberOfValues(ii));
-	}//for (size_t i = 0; i < vSolution.size(); i++)
-}//void COptimizer::v_fill_randomly(const vector<int> &vSolution)
+	}
+}

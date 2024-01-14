@@ -13,6 +13,7 @@ GeneticAlgorithm::GeneticAlgorithm(int populationSize, double crossRatio, double
 	bestFitness(0)
 {
 	initializePopulation();
+	bestIndividual = std::make_unique<Individual>();
 }
 
 
@@ -140,6 +141,7 @@ void GeneticAlgorithm::findBestIndividual()
 	{
 		if (population.at(i).getFitness() > bestFitness)
 		{
+			bestIndividual = std::make_unique<Individual>(population.at(i));
 			bestFitness = population.at(i).getFitness();
 			improved = true;
 		}

@@ -29,4 +29,5 @@ private:
 	mt19937 c_rand_engine;
 
 	GeneticAlgorithm geneticAlgorithm;
+
 };//class COptimizer

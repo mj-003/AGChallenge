@@ -19,8 +19,9 @@ public:
 	~Individual();
 
 	double getFitness() const;
-	void evaluate(CLFLnetEvaluator& evaluator);
+	std::unique_ptr<std::vector<int>>& getGenotype();
 
+	void evaluate(CLFLnetEvaluator& evaluator);
 	void mutate(double mutationRate, CLFLnetEvaluator& evaluator);
 	std::vector<Individual> cross(Individual& other, double crossoverRate, CLFLnetEvaluator& evaluator);
 

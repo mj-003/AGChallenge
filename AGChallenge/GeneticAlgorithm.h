@@ -12,7 +12,7 @@ public:
 	void run(int rounds);
 
 
-public:
+private:
 
 	size_t populationSize;
 	double mutationRatio;
@@ -21,6 +21,7 @@ public:
 
 	CLFLnetEvaluator& evaluator;
 	std::vector<Individual> population;
+	std::unique_ptr<Individual> bestIndividual;
 
 	void initializePopulation();
 	void singleIteration();
@@ -36,5 +37,7 @@ public:
 	bool stagnation = false;
 
 	void checkIfStagnation(bool improved);
+
+	friend class COptimizer;
 
 };
