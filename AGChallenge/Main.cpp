@@ -1,7 +1,6 @@
 #include "Evaluator.h"
 #include "Optimizer.h"
 #include "Timer.h"
-#include "GeneticAlgorithm.h"
 
 #include <exception>
 #include <iostream>
@@ -14,32 +13,50 @@ using namespace std;
 #define dMAX_TIME 20 * 60
 
 
-void vRunExperiment(CLFLnetEvaluator &cConfiguredEvaluator)
+void vRunExperiment(CLFLnetEvaluator& cConfiguredEvaluator)
 {
 	try
 	{
-		GeneticAlgorithm c_optimizer(100, 0.9, 0.0001, cConfiguredEvaluator);
+		CTimeCounter c_time_counter;
 
-		c_optimizer.run(100000);
+		double d_time_passed;
 
-	}//try
+		COptimizer c_optimizer(cConfiguredEvaluator);
+
+		c_time_counter.vSetStartNow();
+
+		c_optimizer.vInitialize();
+
+		c_time_counter.bGetTimePassed(&d_time_passed);
+
+		while (d_time_passed <= dMAX_TIME)
+		{
+			c_optimizer.vRunIteration();
+			c_optimizer.pvGetCurrentBest();
+
+			c_time_counter.bGetTimePassed(&d_time_passed);
+		}
+
+	}
 	catch (exception& c_exception)
 	{
 		cout << c_exception.what() << endl;
 	}//catch (exception &c_exception)
-}//void vRunE
+}//void vRunExperiment(const CEvaluator &cConfiguredEvaluator)
+
+
 
 void  vRunLFLExperiment(CString  sNetName)
 {
 	CLFLnetEvaluator c_lfl_eval;
 	c_lfl_eval.bConfigure(sNetName);
 	vRunExperiment(c_lfl_eval);
-	
+
 }//void vRunRastriginExperiment(int iNumberOfBits, int iBitsPerFloat, int iMaskSeed)
 
 
 
-void main(int iArgCount, char **ppcArgValues)
+void main(int iArgCount, char** ppcArgValues)
 {
 	random_device c_mask_seed_generator;
 	int i_mask_seed = (int)c_mask_seed_generator();

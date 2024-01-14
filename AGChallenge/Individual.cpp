@@ -1,7 +1,7 @@
 #include "Individual.h"
 
 
-/* ---------- Constructors ----------- */
+/* ---------- Constructors and Operators ----------- */
 
 Individual::Individual() 
 	: genotype(std::make_unique<std::vector<int>>()), fitness(-1) 
@@ -40,7 +40,7 @@ Individual::~Individual() = default;
 
 
 
-/* ---------- Public Methods ---------- */
+/* ---------- Calculate Fitness Value ---------- */
 
 void Individual::evaluate(CLFLnetEvaluator& evaluator)
 {
@@ -57,6 +57,9 @@ double Individual::getFitness() const
 }
 
 
+
+/* ---------- Mutate Individual ---------- */
+
 void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 {
 	for (int i = 0; i < genotype->size(); i++)
@@ -71,6 +74,9 @@ void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 	}
 }
 
+
+
+/* ---------- Cross two Individuals ---------- */
 
 std::vector<Individual> Individual::cross(Individual& other, double crossoverRatio, CLFLnetEvaluator& evaluator)
 {

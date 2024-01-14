@@ -12,7 +12,7 @@ public:
 	void run(int rounds);
 
 
-private:
+public:
 
 	size_t populationSize;
 	double mutationRatio;
@@ -36,6 +36,5 @@ private:
 	bool stagnation = false;
 
 	void checkIfStagnation(bool improved);
-
 
 };

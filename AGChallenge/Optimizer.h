@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Evaluator.h"
+#include "GeneticAlgorithm.h"
 
 #include <random>
 #include <vector>
@@ -26,4 +27,6 @@ private:
 	vector<int> v_current_best;
 
 	mt19937 c_rand_engine;
+
+	GeneticAlgorithm geneticAlgorithm;
 };//class COptimizer

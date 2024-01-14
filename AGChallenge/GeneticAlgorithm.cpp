@@ -68,7 +68,7 @@ void GeneticAlgorithm::singleIteration()
 	while (newPopulation.size() < population.size() - 1)
 	{
 		std::vector<Individual> parents;
-		std::vector<Individual> children;
+		std::vector<Individual> children;  
 
 		if (!stagnation) 
 		{
