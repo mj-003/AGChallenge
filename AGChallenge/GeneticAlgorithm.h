@@ -8,13 +8,12 @@ class GeneticAlgorithm
 public:
 
 	GeneticAlgorithm(int populationSize, double mutationRatio, double crossoverRatio, CLFLnetEvaluator& evaluator);
-
 	void run(int rounds);
 
 
 private:
 
-	size_t populationSize;
+	const size_t populationSize;
 	double mutationRatio;
 	double crossoverRatio;
 	double bestFitness;
@@ -32,10 +31,9 @@ private:
 
 	int iterationsWithoutImprovement;
 	const int stagnationThreshold = 10;
-	int tournamentSize = 5;
+	const int tournamentSize = 5;
 	bool stagnation = false;
 
 	void checkIfStagnation(bool improved);
-
 
 };

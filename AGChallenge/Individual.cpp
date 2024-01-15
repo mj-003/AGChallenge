@@ -4,31 +4,13 @@
 /* ---------- Constructors ----------- */
 
 Individual::Individual() 
-	: genotype(std::make_unique<std::vector<int>>()), fitness(-1) 
+	: genotype(std::vector<int>()), fitness(-1)
 {}
 
 
-Individual::Individual(std::unique_ptr<std::vector<int>> genotype)
+Individual::Individual(std::vector<int> genotype)
 	: genotype(std::move(genotype)), fitness(-1) 
 {}
-
-
-Individual::Individual(const Individual& other)
-	: genotype(std::make_unique<std::vector<int>>(*other.genotype)), 
-	  fitness(other.fitness) 
-{}
-
-
-Individual& Individual::operator=(const Individual& other) 
-{
-	if (this != &other) 
-	{
-		genotype = std::make_unique<std::vector<int>>(*other.genotype);
-		fitness = other.fitness;
-	}
-	return *this;
-}
-
 
 
 
@@ -38,7 +20,7 @@ void Individual::evaluate(CLFLnetEvaluator& evaluator)
 {
 	if (fitness == -1)
 	{
-		fitness = evaluator.dEvaluate(genotype.get());
+		fitness = evaluator.dEvaluate(&genotype);
 	}
 }
 
@@ -51,36 +33,34 @@ double Individual::getFitness() const
 
 void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 {
-	for (int i = 0; i < genotype->size(); i++)
+	for (int i = 0; i < genotype.size(); i++)
 	{
 		if (dRand() < mutationRatio)
 		{
-			if (dRand() < 0.3) genotype->at(i) = 0;
-			else genotype->at(i) = lRand(evaluator.iGetNumberOfValues(i));
+			if (dRand() < 0.3) genotype[i] = 0;
+			else genotype[i] = lRand(evaluator.iGetNumberOfValues(i));
 		}
 	}
 }
 
 
-std::vector<Individual> Individual::cross(Individual& other, double crossoverRatio, CLFLnetEvaluator& evaluator)
+std::vector<Individual> Individual::cross(const Individual& other, double crossoverRatio, CLFLnetEvaluator& evaluator) const
 {
 	if (dRand() < crossoverRatio)
 	{
-		int crossoverPoint = lRand(genotype->size());
-		while (crossoverPoint == 0) crossoverPoint = lRand(genotype->size());
+		int crossoverPoint = lRand(genotype.size());
+		while (crossoverPoint == 0) crossoverPoint = lRand(genotype.size());
 
-		auto genotype1 = std::make_unique<std::vector<int>>(*genotype); 
-		auto genotype2 = std::make_unique<std::vector<int>>(*other.genotype); 
+		std::vector<int> genotype1 = genotype;
+		std::vector<int> genotype2 = other.genotype;
 
-		for (int i = crossoverPoint; i < genotype->size(); i++)
+
+		for (int i = crossoverPoint; i < genotype.size(); i++)
 		{
-			std::swap(genotype1->at(i), genotype2->at(i)); 
+			std::swap(genotype1[i], genotype2[i]);
 		}
 
-		Individual child1(std::move(genotype1));
-		Individual child2(std::move(genotype2));
-
-		return std::vector<Individual> { child1, child2 };
+		return std::vector<Individual> { Individual(std::move(genotype1)), Individual(std::move(genotype1)) };
 	}
 
 	else

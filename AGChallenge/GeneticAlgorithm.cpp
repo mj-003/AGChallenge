@@ -31,7 +31,7 @@ void GeneticAlgorithm::run(int iterations)
 
 
 
-/* ---------- Initiation ---------- */
+/* ---------- Initialization ---------- */
 
 void GeneticAlgorithm::initializePopulation() 
 {
@@ -39,11 +39,11 @@ void GeneticAlgorithm::initializePopulation()
 
 	for (int i = 0; i < populationSize; i++) 
 	{
-		auto genotype = std::make_unique<std::vector<int>>();
+		std::vector<int> genotype;
 
 		for (int j = 0; j < genotypeSize; j++) 
 		{
-			genotype->push_back(lRand(evaluator.iGetNumberOfValues(j)));
+			genotype.push_back(lRand(evaluator.iGetNumberOfValues(j)));
 		}
 
 		population.emplace_back(std::move(genotype));
@@ -52,8 +52,7 @@ void GeneticAlgorithm::initializePopulation()
 
 
 
-
-/* ---------- Helper Functions ---------- */
+/* ---------- Single Iteration ---------- */
 
 void GeneticAlgorithm::singleIteration()
 {
@@ -62,7 +61,7 @@ void GeneticAlgorithm::singleIteration()
 	
 	for (int i = 0; i < population.size(); i++)
 	{
-		population.at(i).evaluate(evaluator);
+		population[i].evaluate(evaluator);
 	}
 
 	while (newPopulation.size() < population.size() - 1)
@@ -75,37 +74,38 @@ void GeneticAlgorithm::singleIteration()
 			int fstParentIndex = selectParentIndex(tournamentSize, -1);
 			int sndParentIndex = selectParentIndex(tournamentSize, fstParentIndex);
 
-			parents.push_back(population.at(fstParentIndex));
-			parents.push_back(population.at(sndParentIndex));
+			parents.push_back(population[fstParentIndex]);
+			parents.push_back(population[sndParentIndex]);
 		}
 
 		else 
 		{
-			auto genotype1 = std::make_unique<std::vector<int>>(evaluator.iGetNumberOfBits(), 0);
-			auto genotype2 = std::make_unique<std::vector<int>>(evaluator.iGetNumberOfBits(), 0);
-
+			std::vector<int> genotype1 (evaluator.iGetNumberOfBits(), 0);
+			std::vector<int> genotype2 (evaluator.iGetNumberOfBits(), 0);
+			
 			parents.emplace_back(std::move(genotype1));
 			parents.emplace_back(std::move(genotype2));
 
 			stagnation = false;
 		}
 
-		children = parents.at(0).cross(parents.at(1), crossoverRatio, evaluator);
+		children = parents[0].cross(parents[1], crossoverRatio, evaluator);
 
-		newPopulation.push_back(std::move(children.at(0)));
-		newPopulation.push_back(std::move(children.at(1)));
-		
+		newPopulation.push_back(std::move(children[0]));
+		newPopulation.push_back(std::move(children[1]));
 	}
 
 	for (int i = 0; i < newPopulation.size(); i++)
 	{
-		 // if (dRand() < mutationRatio) 
-			newPopulation.at(i).mutate(mutationRatio, evaluator);
+		newPopulation[i].mutate(mutationRatio, evaluator);
 	}
 
 	population = std::move(newPopulation);
 }
 
+
+
+/* ---------- Helpers ---------- */
 
 int GeneticAlgorithm::selectParentIndex(int tournamentSize, int occupiedIndex)
 {
@@ -132,16 +132,15 @@ int GeneticAlgorithm::selectParentIndex(int tournamentSize, int occupiedIndex)
 }
 
 
-
 void GeneticAlgorithm::findBestIndividual()
 {
 	bool improved = false;
 
 	for (int i = 0; i < population.size(); i++)
 	{
-		if (population.at(i).getFitness() > bestFitness)
+		if (population[i].getFitness() > bestFitness)
 		{
-			bestFitness = population.at(i).getFitness();
+			bestFitness = population[i].getFitness();
 			improved = true;
 		}
 	}
