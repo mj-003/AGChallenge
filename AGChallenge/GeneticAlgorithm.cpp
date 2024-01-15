@@ -99,7 +99,8 @@ void GeneticAlgorithm::singleIteration()
 
 	for (int i = 0; i < newPopulation.size(); i++)
 	{
-		newPopulation.at(i).mutate(mutationRatio, evaluator);
+		 // if (dRand() < mutationRatio) 
+			newPopulation.at(i).mutate(mutationRatio, evaluator);
 	}
 
 	population = std::move(newPopulation);

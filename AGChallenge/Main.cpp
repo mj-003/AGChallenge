@@ -18,16 +18,16 @@ void vRunExperiment(CLFLnetEvaluator &cConfiguredEvaluator)
 {
 	try
 	{
-		GeneticAlgorithm c_optimizer(100, 0.9, 0.0001, cConfiguredEvaluator);
+		GeneticAlgorithm ga(50, 0.9, 0.0001, cConfiguredEvaluator);
 
-		c_optimizer.run(100000);
+		ga.run(100000);
 
-	}//try
+	}
 	catch (exception& c_exception)
 	{
 		cout << c_exception.what() << endl;
-	}//catch (exception &c_exception)
-}//void vRunE
+	}
+}
 
 void  vRunLFLExperiment(CString  sNetName)
 {

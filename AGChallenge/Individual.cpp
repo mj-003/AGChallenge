@@ -19,9 +19,6 @@ Individual::Individual(const Individual& other)
 {}
 
 
-Individual::Individual(Individual&& other) noexcept = default;
-
-
 Individual& Individual::operator=(const Individual& other) 
 {
 	if (this != &other) 
@@ -32,11 +29,6 @@ Individual& Individual::operator=(const Individual& other)
 	return *this;
 }
 
-
-Individual& Individual::operator=(Individual&& other) noexcept = default;
-
-
-Individual::~Individual() = default;
 
 
 
@@ -63,10 +55,8 @@ void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 	{
 		if (dRand() < mutationRatio)
 		{
-			if (dRand() < 0.5)
-				genotype->at(i) = 0;
-			else
-				genotype->at(i) = lRand(evaluator.iGetNumberOfValues(i));
+			if (dRand() < 0.3) genotype->at(i) = 0;
+			else genotype->at(i) = lRand(evaluator.iGetNumberOfValues(i));
 		}
 	}
 }
@@ -77,6 +67,7 @@ std::vector<Individual> Individual::cross(Individual& other, double crossoverRat
 	if (dRand() < crossoverRatio)
 	{
 		int crossoverPoint = lRand(genotype->size());
+		while (crossoverPoint == 0) crossoverPoint = lRand(genotype->size());
 
 		auto genotype1 = std::make_unique<std::vector<int>>(*genotype); 
 		auto genotype2 = std::make_unique<std::vector<int>>(*other.genotype); 

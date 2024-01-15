@@ -32,7 +32,7 @@ private:
 
 	int iterationsWithoutImprovement;
 	const int stagnationThreshold = 10;
-	int tournamentSize = max(populationSize % 10, 2);
+	int tournamentSize = 5;
 	bool stagnation = false;
 
 	void checkIfStagnation(bool improved);
