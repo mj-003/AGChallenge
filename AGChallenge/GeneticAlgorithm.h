@@ -27,7 +27,7 @@ private:
 	int selectParentIndex(int tournamentSize, int occupiedIndex);
 	
 
-	/* ------ helping with stagnation ------ */
+	/* ------ handling stagnation ------ */
 
 	int iterationsWithoutImprovement;
 	const int stagnationThreshold = 10;

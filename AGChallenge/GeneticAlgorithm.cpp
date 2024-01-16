@@ -25,7 +25,7 @@ void GeneticAlgorithm::run(int iterations)
 	{
 		singleIteration();
 		findBestIndividual();
-		std::cout << bestFitness << std::endl;
+		std::cout << i << " " << bestFitness << std::endl;
 	}
 }
 
@@ -40,6 +40,7 @@ void GeneticAlgorithm::initializePopulation()
 	for (int i = 0; i < populationSize; i++) 
 	{
 		std::vector<int> genotype;
+		genotype.reserve(genotypeSize);
 
 		for (int j = 0; j < genotypeSize; j++) 
 		{
@@ -56,7 +57,6 @@ void GeneticAlgorithm::initializePopulation()
 
 void GeneticAlgorithm::singleIteration()
 {
-
 	vector<Individual> newPopulation;
 	
 	for (int i = 0; i < population.size(); i++)
@@ -75,7 +75,7 @@ void GeneticAlgorithm::singleIteration()
 			int sndParentIndex = selectParentIndex(tournamentSize, fstParentIndex);
 
 			parents.push_back(population[fstParentIndex]);
-			parents.push_back(population[sndParentIndex]);
+			parents.push_back(population[sndParentIndex]); 
 		}
 
 		else 

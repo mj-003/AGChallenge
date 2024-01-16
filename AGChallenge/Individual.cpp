@@ -1,4 +1,4 @@
-#include "Individual.h"
+﻿#include "Individual.h"
 
 
 /* ---------- Constructors ----------- */
@@ -14,7 +14,7 @@ Individual::Individual(std::vector<int> genotype)
 
 
 
-/* ---------- Public Methods ---------- */
+/* ---------- Evaluation ---------- */
 
 void Individual::evaluate(CLFLnetEvaluator& evaluator)
 {
@@ -25,11 +25,8 @@ void Individual::evaluate(CLFLnetEvaluator& evaluator)
 }
 
 
-double Individual::getFitness() const
-{
-	return fitness;
-}
 
+/* ---------- Mutation ---------- */
 
 void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 {
@@ -44,27 +41,40 @@ void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 }
 
 
+
+/* ---------- Crossover ---------- */
+
 std::vector<Individual> Individual::cross(const Individual& other, double crossoverRatio, CLFLnetEvaluator& evaluator) const
 {
-	if (dRand() < crossoverRatio)
-	{
-		int crossoverPoint = lRand(genotype.size());
-		while (crossoverPoint == 0) crossoverPoint = lRand(genotype.size());
+    if (dRand() < crossoverRatio)
+    {
+        int crossoverPoint = lRand(genotype.size());
+        while (crossoverPoint == 0) crossoverPoint = lRand(genotype.size());
 
-		std::vector<int> genotype1 = genotype;
-		std::vector<int> genotype2 = other.genotype;
+        std::vector<int> genotype1 = genotype;
+        std::vector<int> genotype2 = other.genotype;
+
+        for (int i = crossoverPoint; i < genotype.size(); i++)
+        {
+            std::swap(genotype1[i], genotype2[i]);
+        }
+
+        Individual child1(std::move(genotype1));
+        Individual child2(std::move(genotype2));
+
+        return std::vector<Individual> { std::move(child1), std::move(child2) };
+    }
+    else
+    {
+        return std::vector<Individual> { *this, other };
+    }
+}
 
 
-		for (int i = crossoverPoint; i < genotype.size(); i++)
-		{
-			std::swap(genotype1[i], genotype2[i]);
-		}
 
-		return std::vector<Individual> { Individual(std::move(genotype1)), Individual(std::move(genotype1)) };
-	}
+/* ---------- Getters ---------- */
 
-	else
-	{
-		return std::vector<Individual> { *this, other };
-	}
+double Individual::getFitness() const
+{
+    return fitness;
 }
