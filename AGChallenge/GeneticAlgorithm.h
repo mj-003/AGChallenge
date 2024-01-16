@@ -25,7 +25,7 @@ private:
 	void singleIteration();
 	void findBestIndividual();
 	int selectParentIndex(int tournamentSize, int occupiedIndex);
-
+	
 
 	/* ------ helping with stagnation ------ */
 
