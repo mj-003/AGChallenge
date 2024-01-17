@@ -30,10 +30,12 @@ private:
 	/* ------ handling stagnation ------ */
 
 	int iterationsWithoutImprovement;
-	const int stagnationThreshold = 10;
-	const int tournamentSize = 5;
+	const int stagnationThreshold = 50;
+	const int tournamentSize = 2;
 	bool stagnation = false;
+	const double globalMutationRatio = 0.0005;
 
 	void checkIfStagnation(bool improved);
+	void performGlobalMutation();
 
 };

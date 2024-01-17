@@ -69,27 +69,16 @@ void GeneticAlgorithm::singleIteration()
 		std::vector<Individual> parents;
 		std::vector<Individual> children;
 
-		if (!stagnation) 
-		{
-			int fstParentIndex = selectParentIndex(tournamentSize, -1);
-			int sndParentIndex = selectParentIndex(tournamentSize, fstParentIndex);
+		if (stagnation) performGlobalMutation();
 
-			parents.push_back(population[fstParentIndex]);
-			parents.push_back(population[sndParentIndex]); 
-		}
+		int fstParentIndex = selectParentIndex(tournamentSize, -1);
+		int sndParentIndex = selectParentIndex(tournamentSize, fstParentIndex);
 
-		else 
-		{
-			std::vector<int> genotype1 (evaluator.iGetNumberOfBits(), 0);
-			std::vector<int> genotype2 (evaluator.iGetNumberOfBits(), 0);
-			
-			parents.emplace_back(std::move(genotype1));
-			parents.emplace_back(std::move(genotype2));
+		parents.push_back(population[fstParentIndex]);
+		parents.push_back(population[sndParentIndex]);
 
-			stagnation = false;
-		}
 
-		children = parents[0].cross(parents[1], crossoverRatio, evaluator);
+		children = parents[0].cross(parents[1], crossoverRatio);
 
 		newPopulation.push_back(std::move(children[0]));
 		newPopulation.push_back(std::move(children[1]));
@@ -151,8 +140,24 @@ void GeneticAlgorithm::findBestIndividual()
 
 void GeneticAlgorithm::checkIfStagnation(bool improved)
 {
-	iterationsWithoutImprovement = improved ? 0 : iterationsWithoutImprovement ++;
+	improved ? iterationsWithoutImprovement = 0 : iterationsWithoutImprovement++;
 	stagnation = iterationsWithoutImprovement >= stagnationThreshold;
+}
+
+
+void GeneticAlgorithm::performGlobalMutation()
+{
+	if (stagnation)
+	{
+		for (int i = 0; i < population.size(); i++)
+		{
+			if (dRand() < 0.5)
+			{
+				population[i].mutate(globalMutationRatio, evaluator);
+			}
+		}
+		stagnation = false;
+	}
 }
 
 

@@ -19,6 +19,6 @@ public:
 
 private:
 
-	std::vector<int> genotype;
+	std::vector<int> genotype;  
 	double fitness;
 };
