@@ -34,8 +34,9 @@ void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 	{
 		if (dRand() < mutationRatio)
 		{
-			if (dRand() < 0.24) genotype[i] = 0;
+			if (dRand() < 0.3) genotype[i] = 0;
 			else genotype[i] = lRand(evaluator.iGetNumberOfValues(i));
+            fitness = -1;
 		}
 	}
 }
@@ -44,7 +45,7 @@ void::Individual::mutate(double mutationRatio, CLFLnetEvaluator& evaluator)
 
 /* ---------- Crossover ---------- */
 
-std::vector<Individual> Individual::cross(const Individual& other, double crossoverRatio, CLFLnetEvaluator& evaluator) const
+std::vector<Individual> Individual::cross(const Individual& other, double crossoverRatio) const
 {
     if (dRand() < crossoverRatio)
     {

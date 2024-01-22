@@ -19,7 +19,7 @@ void vRunExperiment(CLFLnetEvaluator &cConfiguredEvaluator)
 	try
 	{
 		GeneticAlgorithm ga(50, 0.9, 0.0001, cConfiguredEvaluator);
-		ga.run(100000);
+		ga.run(1000000);
 
 	}
 	catch (exception& c_exception)

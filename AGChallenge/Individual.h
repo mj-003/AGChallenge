@@ -14,7 +14,7 @@ public:
 	void evaluate(CLFLnetEvaluator& evaluator);
 
 	void mutate(double mutationRate, CLFLnetEvaluator& evaluator);
-	std::vector<Individual> cross(const Individual& other, double crossoverRate, CLFLnetEvaluator& evaluator) const;
+	std::vector<Individual> cross(const Individual& other, double crossoverRate) const;
 
 
 private:

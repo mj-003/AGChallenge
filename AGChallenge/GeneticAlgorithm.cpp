@@ -151,7 +151,7 @@ void GeneticAlgorithm::performGlobalMutation()
 	{
 		for (int i = 0; i < population.size(); i++)
 		{
-			if (dRand() < 0.5)
+			if (dRand() < 0.005)
 			{
 				population[i].mutate(globalMutationRatio, evaluator);
 			}
