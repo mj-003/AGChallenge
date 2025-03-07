@@ -1,0 +1,2 @@
+## AGChallenge - Genetic Algorithm for Route Optimization in Skeletal Network
+This project focuses on using a Genetic Algorithm to improve route optimization in a sparse computer network. The algorithm incorporates genetic operations such as mutation, crossover, fitness assessment, and backtracking to evolve the network routes. The goal is to apply the knowledge and techniques acquired during the Effective Programming Techniques course at Wrocław University of Science and Technology to solve a practical problem.
